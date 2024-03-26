@@ -18,6 +18,13 @@ class MatchingCls{
     this.staffSheet = spreadSheet.getSheetByName("staff")!;
   }
 
+  /**
+   * # test function
+   */
+  getCalendarName():String{
+    return this.calendar.getName();
+  }
+
   getWorks(){
     let rlist:Array<String> = [];
     let range = this.worksSheet.getDataRange();
