@@ -1,0 +1,7 @@
+/note
+
+# node_modules
+/node_modules
+
+# GAS
+.clasp.json
