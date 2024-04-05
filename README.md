@@ -1,6 +1,6 @@
 # shift management app
 
-googleカレンダーを使用した、シフト管理ツールです
+googleカレンダーを使用した、Google Apps Scriptのシフト管理ツールです
 
 ## 使いみち🤷
 
@@ -51,3 +51,6 @@ GASプロジェクトの設定に移動して必要なスクリプトプロパ�
 | ---- | ---- |
 | calendarID | <カレンダーid> |
 
+```bash
+clasp create --parentId <スプレッドシートのID>
+```
