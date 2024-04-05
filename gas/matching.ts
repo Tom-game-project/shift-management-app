@@ -311,7 +311,11 @@ export class matchingGraph{
      */
     incrSidesIter(start_node_id:number,incr_list:Array<number>):Array<Array<number>>{
         let incr_road_map = [start_node_id].concat(incr_list); 
-        return [...Array(incr_road_map.length-1)].map((i,j) => j%2===0?[incr_road_map[j],incr_road_map[j+1]]:[incr_road_map[j+1],incr_road_map[j]])
+        return [...Array(incr_road_map.length-1)]
+            .map((i,j) => j % 2 === 0 ?
+                    [incr_road_map[j],incr_road_map[j+1]]:
+                    [incr_road_map[j+1],incr_road_map[j]]
+                )
     }
 
     /**
@@ -346,18 +350,18 @@ export class matchingGraph{
             }
             let incriment = this.getIncrRoads(unmatching_list[0]);
 
-            incriment=incriment.filter(i=>i.length>2);
-            if (incriment.length===0){
-                return this.matching_set
+            incriment=incriment.filter(i=>i.length > 2);
+            if (incriment.length == 0){
+                return this.matching_set;
             }else{
-                let incr_road=this.incrSidesIter(unmatching_list[0],incriment[0])
-                let remove_matching_set = [...Array(incr_road.length).keys()].filter(i=>i%2===1).map(i=>incr_road[i]);
-                let add_matching_set    = [...Array(incr_road.length).keys()].filter(i=>i%2===0).map(i=>incr_road[i]);
+                let incr_road=this.incrSidesIter(unmatching_list[0],incriment[0]);
+                let remove_matching_set = [...Array(incr_road.length)].map((i,j)=>j).filter((i)=>i%2===1).map(i=>incr_road[i]);
+                let add_matching_set    = [...Array(incr_road.length)].map((i,j)=>j).filter((i)=>i%2===0).map(i=>incr_road[i]);
                 this.matching_set = this.newMatchingSetCreator(
                     this.matching_set,
                     remove_matching_set,
                     add_matching_set
-                )
+                );
             }
 
         }

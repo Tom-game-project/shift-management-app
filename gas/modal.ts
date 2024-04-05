@@ -1,5 +1,6 @@
 
 import { MatchingCls,xorShiftRandom } from "./code";
+import { matchingGraph,node } from "./matching";
 
 
 function onOpen() {
@@ -39,7 +40,61 @@ function test00(){
   }
 }
 
+/**
+ * # test01
+ * マッチングクラスのテスト
+ */
 function test01() {
-    
+    const works:Array<String> = [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F"
+    ]
+    const staff_ability = [
+        {
+            name: "1",
+            capable: ["B", "D"]
+        },
+        {
+            name: "2",
+            capable: ["A", "C", "E"]
+        },
+        {
+            name: "3",
+            capable: ["B"]
+        },
+        {
+            name: "4",
+            capable: ["D", "E", "F"]
+        },
+        {
+            name: "5",
+            capable: ["B", "D"]
+        },
+    ]
+
+    ////nodeの設定
+    const staff_nodes = [...Array(staff_ability.length)].map((i,j)=>new node(j,staff_ability[j]));
+    const works_nodes = [...Array(works.length)]        .map((i,j)=>new node(j,works[j]));
+
+    let mgraph = new matchingGraph(
+        staff_nodes,
+        works_nodes
+    );//インスタンス化
+
+    for (const i of staff_nodes){
+        for (const j of i.data.capable){
+            // jは役職の名前　例:A,B (..etc)
+            mgraph.addSide(
+                i.id,
+                works.indexOf(j)
+            );
+        }
+    }
+
+    console.log(mgraph.maxMatching());
 }
 
