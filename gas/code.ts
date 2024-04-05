@@ -1,21 +1,15 @@
 // calendar 
 
-class MatchingCls{
+export class MatchingCls{
 
-  private worksSheet:GoogleAppsScript.Spreadsheet.Sheet;
-  private staffSheet:GoogleAppsScript.Spreadsheet.Sheet;
   private calendar  :GoogleAppsScript.Calendar.Calendar;
 
   constructor (){
     // get id
-    const spreadsheetId = PropertiesService.getScriptProperties().getProperty("spreadsheetID");
     const calendarId = PropertiesService.getScriptProperties().getProperty("calendarID");
     // get calendar
     this.calendar = CalendarApp.getCalendarById(calendarId!);
     // spreadSheet
-    let spreadSheet = SpreadsheetApp.openById(spreadsheetId!);
-    this.worksSheet = spreadSheet.getSheetByName("works")!;
-    this.staffSheet = spreadSheet.getSheetByName("staff")!;
   }
 
   /**
@@ -25,29 +19,26 @@ class MatchingCls{
     return this.calendar.getName();
   }
 
-  getWorks(){
-    let rlist:Array<String> = [];
-    let range = this.worksSheet.getDataRange();
-    for (const work of range.getValues()){
-      rlist.push(work[0]);
+  getWorksCalendar(day:string){
+      let date = new Date(day);
+      let events = this.calendar.getEventsForDay(date);
+      let eventNum = events.length;
+      console.log(eventNum);
+      for (let i = 0; i < eventNum; i++) {
+        let title = events[i].getTitle(); //予定のタイトル
+        let startTime = events[i].getStartTime(); //予定の開始日時
+        let endTime = events[i].getEndTime(); //予定の終了日時
+        let description = events[i].getDescription(); //予定の説明
+        let location = events[i].getLocation(); //場所
+        console.log(title);
+        console.log(startTime);
+        console.log(endTime);
+        console.log(description);
+        return events;
     }
-    return rlist;
   }
 
   getStaff(){
     // get all rows
-    let range = this.staffSheet.getDataRange();
-    return range.getValues();
   }
 }
-
-
-/**
- * # test00
- */
-function test00(){
-  const mc = new MatchingCls();
-  console.log(mc.getWorks());
-  console.log(mc.getStaff());
-}
-
