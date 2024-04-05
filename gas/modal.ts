@@ -1,5 +1,6 @@
 
-import { MatchingCls } from "./code";
+import { MatchingCls,xorShiftRandom } from "./code";
+
 
 function onOpen() {
     SpreadsheetApp.getUi()
@@ -27,7 +28,18 @@ function showExampleDialog() {
  */
 function test00(){
   const mc = new MatchingCls();
-  console.log(mc.getWorksCalendar("2024/04/02"));
+  let tasks = mc.getWorksCalendar("2024/04/02")!;
+  for (const event of tasks!){
+    console.log(mc.getTasksFromWorkEvent(event));
+    let staffs = mc.getStaffFromTimeRange(
+        event.getStartTime(),
+        event.getEndTime()
+    );
+    console.log(staffs!);
+  }
 }
 
+function test01() {
+    
+}
 
