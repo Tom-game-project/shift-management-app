@@ -25,7 +25,6 @@ export class node{
     }
 }
 
-
 function structuredClone(obj:Object){
     return JSON.parse(JSON.stringify(obj));
 }
@@ -47,43 +46,14 @@ export class matchingGraph{
     private marked_bnode:Array<number>;
 
     constructor(anodes:Array<node>,bnodes:Array<node>){
-        /**
-         * @type {Array<node>}
-         */
         this.anodes = anodes; // 頂点集合左
-        /**
-         * @type {Array<node>}
-         */
         this.bnodes = bnodes; // 頂点集合右
-
-        /**
-         * @type {Array<Array<Number>>}
-         */
         this.sides = Array(); // 辺
-
-        /**
-         * @type {Array<Array<Number>>}
-         */
         this.matching_set = []; // マッチング集合
-
         //以下は増加道を発見する際に使います
-        /**
-         * @typedef {Array<Number>} incrRoads
-         * @type {Array<incrRoads>}
-         */
         this.incr_roads = [];
-        /**
-         * @type {incrRoads}
-         */
         this.incr_road = [];
-
-        /**
-         * @type {Array<Number>}
-         */
         this.marked_anode = [];
-        /**
-         * @type {Array<Number>}
-         */
         this.marked_bnode = [];
     }
 
@@ -375,8 +345,8 @@ export class matchingGraph{
             let incriment = this.getIncrRoads(i).filter(j=>j.length>1);
             for (const inc of incriment){
                 let incr_road = this.incrSidesIter(i,inc);
-                let remove_matching_set = [...Array(incr_road.length).keys()].filter(j=>j%2===1).map(j=>incr_road[j])
-                let add_matching_set = [...Array(incr_road.length).keys()].filter(j=>j%2===0).map(j=>incr_road[j]);
+                let remove_matching_set = [...Array(incr_road.length)].map((i,j)=>j).filter(j=>j%2===1).map(j=>incr_road[j])
+                let add_matching_set = [...Array(incr_road.length)   ].map((i,j)=>j).filter(j=>j%2===0).map(j=>incr_road[j]);
                 let changedmatching = this.newMatchingSetCreator(
                     this.matching_set,
                     remove_matching_set,
