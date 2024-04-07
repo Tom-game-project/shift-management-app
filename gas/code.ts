@@ -38,18 +38,6 @@ export class MatchingCls{
   }
 
   /**
-   * ## getTasks 
-   * その日の仕事のdescriptionからタスクを抽出する
-   * @param event 
-   * @returns 
-   */
-  getTasksFromWorkEvent(event:GoogleAppsScript.Calendar.CalendarEvent):String[]{
-    let works = event.getDescription()
-    let workslist = works.split(/\n/);
-    return workslist;
-  }
-
-  /**
    * ## getStaffFromTimeRange
    * 取得した仕事の時間範囲からその時間帯に働けるスタッフを取得する
    * @param startTime 
