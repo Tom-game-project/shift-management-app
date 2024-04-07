@@ -2,7 +2,10 @@
 <html>
   <head>
     <!--bootstrap-->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+    crossorigin="anonymous">
     <base target="_top" />
   </head>
   <body>
@@ -15,19 +18,6 @@
     class="d-grid btn-group-vertical" 
     id="resultRadioList"
     role="group" aria-label="Vertical radio toggle button group">
-    <!--
-      <input type="radio" class="btn-check" name="vbtn-radio" id="vbtn-radio1" autocomplete="off" checked>
-      <label class="btn btn-outline-info" for="vbtn-radio1">
-        <div>
-          <div>水曜日のシフト午前</div>
-          <p><span>2024/05/01</span> ⋅ <span>9:00~17:00</span></p>
-        </div>
-      </label>
-      <input type="radio" class="btn-check" name="vbtn-radio" id="vbtn-radio2" autocomplete="off">
-      <label class="btn btn-outline-info" for="vbtn-radio2">Radio 2</label>
-      <input type="radio" class="btn-check" name="vbtn-radio" id="vbtn-radio3" autocomplete="off">
-      <label class="btn btn-outline-info" for="vbtn-radio3">Radio 3</label>
-    -->
     </div>
 
     <div
@@ -60,10 +50,15 @@
     </div>
     
     <script type="text/javascript">
+      /**
+       * 
+       * 
+      */
+
       function clearElemChild(id){
-        let shiftTable = document.getElementById(id);
-        while (shiftTable.firstChild) {
-          shiftTable.removeChild(shiftTable.firstChild);
+        let elem = document.getElementById(id);
+        while (elem.firstChild) {
+          elem.removeChild(elem.firstChild);
         }
       }
 
@@ -141,7 +136,15 @@
         }
       }
 
-
+      function radioBtnChecker() {
+        let resultRadioList = document.getElementsByName("vbtn-radio");
+        for (let i = 0;i < resultRadioList.length; resultRadioList){
+          if (resultRadioList.item(i).checked){
+            return resultRadioList.item(i).value;
+          }
+        }
+        return false;
+      }
       // set event listener
       document
       .getElementById("searchBtn")
@@ -167,7 +170,7 @@
         })
         .withFailureHandler((r)=>{
           console.log(r);
-        }).genMatching("2024/05/01");
+        }).genMatching(radioBtnChecker());
       };
 
     </script>
