@@ -2,8 +2,8 @@
   "dependencies": {
     "@types/google-apps-script": "^1.0.82"
   },
-  "scripts":{
-    "setting":"rm ./appsscript.json && python3 setting.py",
-    "push":"clasp push"
+  "scripts": {
+    "setting": "rm ./appsscript.json && python3 setting.py",
+    "push": "clasp push"
   }
 }

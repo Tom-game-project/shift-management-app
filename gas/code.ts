@@ -37,16 +37,8 @@ export class MatchingCls{
     this.staffCalendar = CalendarApp.getCalendarById(staffCalendarId!);
   }
 
-  /**
-   * ## getTasks 
-   * その日の仕事のdescriptionからタスクを抽出する
-   * @param event 
-   * @returns 
-   */
-  getTasksFromWorkEvent(event:GoogleAppsScript.Calendar.CalendarEvent):String[]{
-    let works = event.getDescription()
-    let workslist = works.split(/\n/);
-    return workslist;
+  getWorkEventById(id:string){
+    return this.taskCalendar.getEventById(id);
   }
 
   /**
@@ -81,11 +73,11 @@ export class MatchingCls{
         let endTime = events[i].getEndTime(); //予定の終了日時
         let description = events[i].getDescription(); //予定の説明
         let location = events[i].getLocation(); //場所
-        console.log("title",title);
-        console.log("startTime",startTime);
-        console.log("startTime",startTime.getTime());
-        console.log("endTime",endTime);
-        console.log("description",description);
+        // console.log("title",title);
+        // console.log("startTime",startTime);
+        // console.log("startTime",startTime.getTime());
+        // console.log("endTime",endTime);
+        // console.log("description",description);
         return events;
     }
   }
