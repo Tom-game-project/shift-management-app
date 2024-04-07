@@ -6,6 +6,30 @@
     <base target="_top" />
   </head>
   <body>
+    <div>
+      <input type="date" id="targetDate"/>
+      <button class="btn" id="searchBtn">検索</button>
+    </div>
+
+    <div 
+    class="d-grid btn-group-vertical" 
+    id="resultRadioList"
+    role="group" aria-label="Vertical radio toggle button group">
+    <!--
+      <input type="radio" class="btn-check" name="vbtn-radio" id="vbtn-radio1" autocomplete="off" checked>
+      <label class="btn btn-outline-info" for="vbtn-radio1">
+        <div>
+          <div>水曜日のシフト午前</div>
+          <p><span>2024/05/01</span> ⋅ <span>9:00~17:00</span></p>
+        </div>
+      </label>
+      <input type="radio" class="btn-check" name="vbtn-radio" id="vbtn-radio2" autocomplete="off">
+      <label class="btn btn-outline-info" for="vbtn-radio2">Radio 2</label>
+      <input type="radio" class="btn-check" name="vbtn-radio" id="vbtn-radio3" autocomplete="off">
+      <label class="btn btn-outline-info" for="vbtn-radio3">Radio 3</label>
+    -->
+    </div>
+
     <div
       class="table-responsive"
     >
@@ -34,27 +58,17 @@
         作成
       </button>
     </div>
-    <div class="d-grid gap-2">
-      <button
-        type="button"
-        name=""
-        id="exBtn"
-        class="btn btn-primary"
-      >
-        Example Button
-      </button>
-    </div>
     
     <script type="text/javascript">
-      function clearShiftTable(){
-        let shiftTable = document.getElementById("shiftTable");
+      function clearElemChild(id){
+        let shiftTable = document.getElementById(id);
         while (shiftTable.firstChild) {
           shiftTable.removeChild(shiftTable.firstChild);
         }
       }
 
       function renderShiftTable(list){
-        clearShiftTable();// テーブルをクリア
+        clearElemChild("shiftTable");// テーブルをクリア
         let shiftTable = document.getElementById("shiftTable");
         for (const i of list){
           // <tr class="">
@@ -73,8 +87,76 @@
         }
       }
 
+      function renderResultRadioResult(list) {
+        // <input type="radio" class="btn-check" name="vbtn-radio" id="vbtn-radio1" autocomplete="off" checked>
+        // <label class="btn btn-outline-info" for="vbtn-radio1">
+        //   <div>
+        //     <div>水曜日のシフト午前</div>
+        //     <p><span>2024/05/01</span> ⋅ <span>9:00~17:00</span></p>
+        //   </div>
+        // </label>
+        clearElemChild("resultRadioList");
+        let resultRadioList = document.getElementById("resultRadioList");
+        let count = 0;
+        for (const i of list){
+          /**
+           * i.title
+           * i.date
+           * i.timeRange
+           * i.id
+          */
+          let id = `vbtn-radio${count}`;
+          let input = document.createElement("input");
+          input.setAttribute("type","radio");
+          input.setAttribute("class","btn-check");
+          input.setAttribute("name","vbtn-radio");
+          input.setAttribute("id",id);
+          input.setAttribute("autocomplete","off");
+          input.setAttribute("value",i.id); //unique calendar id 
+          if (count == 0){
+            input.checked = true;
+          }
+          let label = document.createElement("label");
+          label.setAttribute("class","btn btn-outline-info");
+          label.setAttribute("for",id);
+            let div0 = document.createElement("div");
+              let div0_0 = document.createElement("div");
+              div0_0.textContent = i.title;                      // 
+              let p = document.createElement("p");
+                let span0 = document.createElement("span");
+                let span1 = document.createElement("span");
+                let span2 = document.createElement("span");
+                span0.textContent = i.date; //yyyy/mm/dd 
+                span1.textContent = " ⋅ ";
+                span2.textContent = i.timeRange; // 
+              p.appendChild(span0);
+              p.appendChild(span1);
+              p.appendChild(span2);
+            div0.appendChild(div0_0);
+            div0.appendChild(p);
+          label.appendChild(div0);
+          resultRadioList.appendChild(input);
+          resultRadioList.appendChild(label);
+          count++;
+        }
+      }
+
 
       // set event listener
+      document
+      .getElementById("searchBtn")
+      .onclick =()=>{
+        let targetDate = document.getElementById("targetDate");
+        console.log("targetDate",targetDate.value);
+        google.script.run
+        .withSuccessHandler((r)=>{
+          console.log(r);
+          renderResultRadioResult(r);
+        })
+        .withFailureHandler((r)=>{
+          console.log(r);
+        }).getWorksDataOfTheDay(targetDate.value);
+      };
       document
       .getElementById("genBtn")
       .onclick =()=>{
@@ -86,7 +168,8 @@
         .withFailureHandler((r)=>{
           console.log(r);
         }).genMatching("2024/05/01");
-      }
+      };
+
     </script>
     <script 
     src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
