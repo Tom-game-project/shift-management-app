@@ -6,7 +6,6 @@
     <base target="_top" />
   </head>
   <body>
-    <h1>シフト作成</h1>
     <div
       class="table-responsive"
     >
@@ -19,15 +18,8 @@
             <th scope="col">スタッフ</th>
           </tr>
         </thead>
-        <tbody>
-          <tr class="">
-            <td scope="row">R1C1</td>
-            <td>R1C2</td>
-          </tr>
-          <tr class="">
-            <td scope="row">Item</td>
-            <td>Item</td>
-          </tr>
+        <tbody id="shiftTable">
+          <!--shift table-->
         </tbody>
       </table>
     </div>
@@ -36,13 +28,69 @@
       <button
         type="button"
         name=""
-        id=""
+        id="genBtn"
         class="btn btn-primary"
       >
         作成
       </button>
     </div>
+    <div class="d-grid gap-2">
+      <button
+        type="button"
+        name=""
+        id="exBtn"
+        class="btn btn-primary"
+      >
+        Example Button
+      </button>
+    </div>
     
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      function clearShiftTable(){
+        let shiftTable = document.getElementById("shiftTable");
+        while (shiftTable.firstChild) {
+          shiftTable.removeChild(shiftTable.firstChild);
+        }
+      }
+
+      function renderShiftTable(list){
+        clearShiftTable();// テーブルをクリア
+        let shiftTable = document.getElementById("shiftTable");
+        for (const i of list){
+          // <tr class="">
+          //   <td scope="row">Item</td>
+          //   <td>Item</td>
+          // </tr>
+          let tr = document.createElement("tr");
+          let td0 = document.createElement("td");
+          td0.setAttribute("class","row");
+          td0.textContent = i[0];
+          let td1 = document.createElement("td");
+          td1.textContent = i[1].name;
+          tr.appendChild(td0);
+          tr.appendChild(td1);
+          shiftTable.appendChild(tr);
+        }
+      }
+
+
+      // set event listener
+      document
+      .getElementById("genBtn")
+      .onclick =()=>{
+        google.script.run
+        .withSuccessHandler((r)=>{
+          console.log(r);
+          renderShiftTable(r);
+        })
+        .withFailureHandler((r)=>{
+          console.log(r);
+        }).genMatching("2024/05/01");
+      }
+    </script>
+    <script 
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+    crossorigin="anonymous"></script>
   </body>
 </html>

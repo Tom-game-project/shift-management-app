@@ -3,7 +3,6 @@ import { MatchingCls,xorShiftRandom} from "./code";
 import { matchingGraph,node } from "./matching";
 
 
-
 function onOpen() {
     // SpreadsheetApp.getUi()
     // .createMenu("環境設定")
@@ -14,8 +13,8 @@ function onOpen() {
     .addItem("exampleダイアログを表示", "showExampleDialog")
     .addToUi();
     SpreadsheetApp.getUi()
-    .createMenu("シフト操作")
-    .addItem("シフトを作成", "showCreateShiftDialog")
+    .createMenu("シフト作成")
+    .addItem("一回分のシフトを作成", "showCreateShiftDialog")
     .addToUi();
 }
 
@@ -36,7 +35,7 @@ function showCreateShiftDialog(){
     .setHeight(300);
   SpreadsheetApp
     .getUi() // Or DocumentApp or SlidesApp or FormApp.
-    .showModalDialog(html, "一日分のシフトを作成");
+    .showModalDialog(html, "一回分のシフトを作成");
 }
 
 /**
@@ -68,6 +67,61 @@ function staff2matchingformat(staffs:GoogleAppsScript.Calendar.CalendarEvent[],w
   }
   return rlist;
 }
+
+// # Call function
+
+
+/**
+ * # genMatching
+ * マッチングを生成します
+ */
+function genMatching(date:string){
+  let matching_result;
+  const mc = new MatchingCls();
+  let works = mc.getWorksCalendar(date)!;
+  for (const work of works!){
+    let staffs = mc.getStaffFromTimeRange(
+        work.getStartTime(),
+        work.getEndTime()
+    );
+    let works_list = getTasksFromWorkEvent(work);
+    let staff_list = staff2matchingformat(staffs,works_list);
+    console.log(staff_list);
+    const staff_nodes = [...Array(staff_list.length)].map((i,j)=> new node(j,staff_list[j]));
+    const works_nodes = [...Array(works_list.length)].map((i,j)=> new node(j,works_list[j]));
+    console.log(staff_nodes);
+    console.log(works_nodes);
+    let mgraph = new matchingGraph(
+        staff_nodes,
+        works_nodes
+    );//インスタンス化
+     
+    for (const i of staff_nodes){
+        for (const j of i.data.capable){
+            // jは役職の名前　例:A,B (..etc)
+            mgraph.addSide(
+                i.id,
+                works_list.indexOf(j)
+            );
+        }
+    }
+    console.log("最大マッチング",mgraph.maxMatching());
+    matching_result = mgraph
+      .maxMatching()
+      .map(i => 
+        [
+            works_list[i[1]],
+            staff_list[i[0]],
+        ]
+      );
+    // test
+    
+    console.log(matching_result);
+  }
+  return matching_result;
+}
+
+// # test function
 
 /**
  * # test00
